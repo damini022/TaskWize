@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart To-Do List</title>
+
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2a0a9f;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .input-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .input-group input,
+    .input-group select,
+    .input-group button {
+      padding: 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      flex: 1 1 200px;
+      min-width: 180px;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+
+    .input-group button {
+      background: #007bff;
+      color: white;
+      border: none;
+      transition: background 0.3s;
+    }
+
+    .input-group button:hover {
+      background: #0056b3;
+      cursor: pointer;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .filters select,
+    .filters input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      min-width: 150px;
+    }
+
+    #taskList li {
+      display: flex;
+      flex-direction: column;
+      border-left: 6px solid #007bff;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      background: linear-gradient(to right, #ffffff, #f9f9f9);
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      transition: 0.3s ease;
+    }
+
+    li.overdue {
+      border-left-color: #e74c3c;
+      background: #fff3f3;
+    }
+
+    li:hover {
+      transform: translateY(-2px);
+    }
+
+    li strong {
+      font-size: 16px;
+      color: #2c3e50;
+    }
+
+    li .countdown {
+      font-size: 13px;
+      font-style: italic;
+      margin-top: 4px;
+      color: #666;
+    }
+
+    .badges {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .priority-high {
+      background: #e74c3c;
+    }
+
+    .priority-medium {
+      background: #f39c12;
+      color: black;
+    }
+
+    .priority-low {
+      background: #27ae60;
+    }
+
+    .category-general {
+      background: #7f8c8d;
+    }
+
+    .category-work {
+      background: #3498db;
+    }
+
+    .category-personal {
+      background: #9b59b6;
+    }
+
+    .delete-btn {
+      margin-top: 12px;
+      align-self: flex-end;
+      color: #e74c3c;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    .delete-btn:hover {
+      color: #c0392b;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      .input-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .input-group input,
+      .input-group select,
+      .input-group button {
+        width: 100%;
+      }
+
+      #taskList li {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      .delete-btn {
+        font-size: 12px;
+        align-self: flex-start;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .task-enter {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .welcome-banner {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      padding: 15px;
+      margin-bottom: 25px;
+      color: white;
+      background: linear-gradient(90deg, #6e21a5, #711ec5, #ff6a00);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.8s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="welcome-banner">Welcome to Your Smart To-Do List</div>
+
+    <h1>📝 Smart To-Do List</h1>
+
+    <div class="input-group">
+      <input type="text" id="taskInput" placeholder="Task Title" />
+      <input type="text" id="descInput" placeholder="Description" />
+      <input type="date" id="dueDateInput" />
+      <select id="priorityInput">
+        <option value="High">High</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="Low">Low</option>
+      </select>
+      <select id="categoryInput">
+        <option value="General">General</option>
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+      </select>
+      <button onclick="addTask()">Add Task</button>
+    </div>
+
+    <div class="filters">
+      <select id="filterPriority">
+        <option value="All">All Priorities</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+
+      <select id="filterCategory">
+        <option value="All">All Categories</option>
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+        <option value="General">General</option>
+      </select>
+
+      <input type="text" id="searchInput" placeholder=" Search tasks..." />
+    </div>
+
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    const taskList = document.getElementById("taskList");
+    window.onload = loadTasks;
+
+    function addTask() {
+      const title = document.getElementById("taskInput").value.trim();
+      const desc = document.getElementById("descInput").value.trim();
+      const dueDate = document.getElementById("dueDateInput").value;
+      const priority = document.getElementById("priorityInput").value;
+      const category = document.getElementById("categoryInput").value;
+
+      if (!title || !dueDate) {
+        alert("Please fill in at least Task Title and Due Date.");
+        return;
+      }
+
+      const task = { title, desc, dueDate, priority, category };
+      saveTask(task);
+      createTaskElement(task);
+      clearInputs();
+    }
+
+    function clearInputs() {
+      document.getElementById("taskInput").value = "";
+      document.getElementById("descInput").value = "";
+      document.getElementById("dueDateInput").value = "";
+    }
+
+    function createTaskElement(task) {
+      const li = document.createElement("li");
+      li.classList.add("task-enter");
+
+      const now = new Date();
+      const due = new Date(task.dueDate);
+      now.setHours(0, 0, 0, 0);
+      due.setHours(0, 0, 0, 0);
+      const daysLeft = Math.floor((due - now) / (1000 * 60 * 60 * 24));
+      if (daysLeft < 0) li.classList.add("overdue");
+
+      li.innerHTML = `
+        <strong>${task.title}</strong>
+        <div>${task.desc}</div>
+        <div class="countdown">${getCountdownText(daysLeft)}</div>
+        <div class="badges">
+          <span class="badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
+          <span class="badge category-${task.category.toLowerCase()}">${task.category}</span>
+        </div>
+        <span class="delete-btn" onclick="deleteTask(this)">delete</span>
+      `;
+
+      taskList.appendChild(li);
+    }
+
+    function getCountdownText(days) {
+      if (days < 0) return `Overdue by ${Math.abs(days)} day${Math.abs(days) !== 1 ? 's' : ''}`;
+      if (days === 0) return `Due Today`;
+      return `Due in ${days} day${days !== 1 ? 's' : ''}`;
+    }
+
+    function saveTask(task) {
+      const tasks = getTasks();
+      tasks.push(task);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      const tasks = getTasks();
+      tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+      taskList.innerHTML = "";
+      tasks.forEach(task => createTaskElement(task));
+    }
+
+    function getTasks() {
+      return JSON.parse(localStorage.getItem("tasks")) || [];
+    }
+
+    function deleteTask(el) {
+      const taskTitle = el.parentElement.querySelector("strong").textContent;
+      let tasks = getTasks();
+      tasks = tasks.filter(task => task.title !== taskTitle);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      el.parentElement.remove();
+    }
+  </script>
+</body>
+</html>
