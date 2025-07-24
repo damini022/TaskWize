@@ -3,7 +3,7 @@
 **TaskWise** is a sleek and responsive to-do list application built using only HTML, CSS, and JavaScript. It features due-date countdowns, filtering, search, priority badges, and category grouping — all stored using `localStorage`, so no backend or sign-in is required.
 
 # Live Demo 
-> [View the live version here](https://yourusername.github.io/taskwise)
+> [View the live version here]( https://damini022.github.io/TaskWize/)
 
 # Features
 -  Add tasks with:
@@ -34,8 +34,8 @@
 
 
 # Future Enhancements
--Edit existing tasks  
--Task completion checkmarks  
+- Edit existing tasks  
+- Task completion checkmarks  
 - Drag-and-drop reordering  
 - Dark mode toggle
  
